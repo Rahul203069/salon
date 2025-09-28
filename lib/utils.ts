@@ -14,6 +14,6 @@ export function createPageUrl (page: string)  {
     case "contact":
       return "/salon/contact";
     default:
-      return "/salon";
+      return "home/salon";
   }
 };
