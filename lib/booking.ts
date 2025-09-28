@@ -1,4 +1,4 @@
-export const Bookings = [
+export const Booking = [
   {
     id: "bk1",
     client_name: "Sarah Johnson",

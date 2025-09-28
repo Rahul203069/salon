@@ -1,9 +1,9 @@
-//@ts-nocheck
+
 "use client";
 import React, { useState, useEffect } from "react";
-import  Booking  from "@/lib/booking";
+import  {Booking}  from "@/lib/booking";
 
-import  Service  from "@/lib/service";
+import  {Service} from "@/lib/service";
 import { Calendar, Clock, User, Phone, Mail, MessageCircle, CheckCircle, Star } from "lucide-react";
 
 export default function BookingPage() {
