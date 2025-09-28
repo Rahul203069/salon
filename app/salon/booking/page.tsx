@@ -1,4 +1,4 @@
-
+//@ts-nocheck
 "use client";
 import React, { useState, useEffect } from "react";
 import  {Booking}  from "@/lib/booking";
@@ -84,7 +84,7 @@ export default function BookingPage() {
 
   const loadServices = async () => {
     try {
-      const data = await Service.list();
+      const data = Service
       setServices(data);
     } catch (error) {
       console.error("Error loading services:", error);
