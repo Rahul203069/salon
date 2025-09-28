@@ -3,25 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { Calendar, Star, Sparkles, Scissors, Palette, Users } from "lucide-react";
 
-const createPageUrl = (page: string) => {
-  const slug = page.toLowerCase();
-  switch (slug) {
-    case "home":
-      return "/home";
-    case "services":
-      return "/services";
-    case "stylists":
-      return "/stylists";
-    case "booking":
-      return "/booking";
-    case "gallery":
-      return "/gallery";
-    case "contact":
-      return "/contact";
-    default:
-      return "/";
-  }
-};
+import { createPageUrl } from "@/lib/utils";
 
 export default function Page() {
   const services = [
@@ -125,7 +107,7 @@ export default function Page() {
                   <h3 className="text-3xl font-black mb-2">{service.title}</h3>
                   <p className="text-2xl font-bold">{service.price}</p>
                   <div className="mt-6">
-                    <Link href={createPageUrl("Services")}>
+                    <Link href={'/salon/services'}>
                       <button className="neo-button bg-white text-black px-6 py-3 text-sm font-black w-full">
                         LEARN MORE
                       </button>
@@ -170,7 +152,7 @@ export default function Page() {
             ))}
           </div>
           <div className="text-center mt-12">
-            <Link href={createPageUrl("Stylists")}>
+            <Link href={'salon/stylist'}>
               <button className="neo-button neo-shadow bg-yellow-400 text-black px-8 py-4 text-xl font-black">
                 <Users className="inline w-6 h-6 mr-2" />
                 MEET ALL STYLISTS
@@ -226,7 +208,7 @@ export default function Page() {
               <p className="text-2xl font-black text-black mb-6">
                 BOOK YOUR APPOINTMENT TODAY!
               </p>
-              <Link href={createPageUrl("Booking")}>
+              <Link href={'/salon/booking'}>
                 <button className="neo-button neo-shadow bg-pink-600 text-white px-12 py-6 text-2xl">
                   <Calendar className="inline w-8 h-8 mr-3" />
                   BOOK NOW
