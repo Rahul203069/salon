@@ -1,23 +1,77 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Phone, Mail, MapPin, Clock, Instagram, Facebook } from "lucide-react";
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import dynamic from "next/dynamic";
 
-// Fix for default marker icon issue with webpack
-delete L.Icon.Default.prototype._getIconUrl;
+// Dynamically import Leaflet components with no SSR
+const DynamicMap = dynamic(
+  () => import('react-leaflet').then((mod) => {
+    const { MapContainer, TileLayer, Marker, Popup } = mod;
+    
+    // Component that will be dynamically loaded
+    const MapComponent = () => {
+      const [isClient, setIsClient] = useState(false);
+      
+      useEffect(() => {
+        setIsClient(true);
+        
+        // Fix for default marker icon issue with webpack
+        const L = require('leaflet');
+        delete L.Icon.Default.prototype._getIconUrl;
+        L.Icon.Default.mergeOptions({
+          iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+          iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+          shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+        });
+      }, []);
 
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-});
+      if (!isClient) {
+        return (
+          <div className="aspect-video bg-gray-200 neo-border flex items-center justify-center">
+            <p className="text-xl font-bold text-gray-600">Loading Map...</p>
+          </div>
+        );
+      }
 
+      const position: [number, number] = [40.723, -73.999]; // SoHo, NYC Coordinates
+
+      return (
+        <div className="aspect-video bg-gray-200 neo-border overflow-hidden">
+          <MapContainer 
+            center={position} 
+            zoom={15} 
+            scrollWheelZoom={false} 
+            style={{ height: '100%', width: '100%' }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              className="grayscale"
+            />
+            <Marker position={position}>
+              <Popup>
+                <span className="font-black text-lg">SALON LUXE</span>
+                <br /> 123 Style Street, New York, NY
+              </Popup>
+            </Marker>
+          </MapContainer>
+        </div>
+      );
+    };
+    
+    return MapComponent;
+  }),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="aspect-video bg-gray-200 neo-border flex items-center justify-center">
+        <p className="text-xl font-bold text-gray-600">Loading Map...</p>
+      </div>
+    )
+  }
+);
 
 export default function Contact() {
-  const position = [40.723, -73.999]; // SoHo, NYC Coordinates
-
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -105,21 +159,7 @@ export default function Contact() {
           
           <div className="transform rotate-2">
             <div className="neo-border neo-shadow bg-white p-8">
-              <div className="aspect-video bg-gray-200 neo-border overflow-hidden">
-                <MapContainer center={position} zoom={15} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    className="grayscale"
-                  />
-                  <Marker position={position}>
-                    <Popup>
-                      <span className="font-black text-lg">SALON LUXE</span>
-                      <br /> 123 Style Street, New York, NY
-                    </Popup>
-                  </Marker>
-                </MapContainer>
-              </div>
+              <DynamicMap />
             </div>
           </div>
         </div>
