@@ -8,7 +8,7 @@ import { Scissors, Palette, Sparkles, Heart, Calendar, Clock } from "lucide-reac
 
 import { Service } from "@/lib/service";
 
-import { createPageUrl } from "../layout";
+import { createPageUrl } from "@/lib/utils";
 
 
 

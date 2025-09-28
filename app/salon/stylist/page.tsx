@@ -3,26 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { Calendar, Award, Heart } from "lucide-react";
 
-const createPageUrl = (page: string) => {
-  const slug = page.toLowerCase();
-  switch (slug) {
-    case "home":
-      return "/";
-    case "services":
-      return "/services";
-    case "stylists":
-      return "/stylists";
-    case "booking":
-      return "/booking";
-    case "gallery":
-      return "/gallery";
-    case "contact":
-      return "/contact";
-    default:
-      return "/";
-  }
-};
-
+import { createPageUrl } from "@/lib/utils";
 export default function Stylists() {
   const stylists = [
     {
